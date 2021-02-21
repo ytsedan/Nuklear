@@ -724,7 +724,7 @@ device_draw(struct device *dev, struct nk_context *ctx, int width, int height,
             config.global_alpha = 1.0f;
             config.shape_AA = AA;
             config.line_AA = AA;
-            config.scale_AA = scale.y;
+            config.feather_AA = 1.0f / scale.y;
 
             /* setup buffers to load vertices and elements */
             {struct nk_buffer vbuf, ebuf;

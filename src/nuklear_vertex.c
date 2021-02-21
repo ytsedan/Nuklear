@@ -438,7 +438,7 @@ nk_draw_list_stroke_poly_line(struct nk_draw_list *list, const struct nk_vec2 *p
 
     if (aliasing == NK_ANTI_ALIASING_ON) {
         /* ANTI-ALIASED STROKE */
-        const float AA_SIZE = 1.0f / list->config.scale_AA;
+        const float AA_SIZE = list->config.feather_AA;
         NK_STORAGE const nk_size pnt_align = NK_ALIGNOF(struct nk_vec2);
         NK_STORAGE const nk_size pnt_size = sizeof(struct nk_vec2);
 
@@ -677,7 +677,7 @@ nk_draw_list_fill_poly_convex(struct nk_draw_list *list,
         nk_size i0 = 0;
         nk_size i1 = 0;
 
-        const float AA_SIZE = 1.0f / list->config.scale_AA;
+        const float AA_SIZE = list->config.feather_AA;
         nk_size vertex_offset = 0;
         nk_size index = list->vertex_count;
 
