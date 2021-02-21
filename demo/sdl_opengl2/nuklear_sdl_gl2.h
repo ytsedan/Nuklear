@@ -224,7 +224,7 @@ NK_API void
 nk_sdl_font_stash_end(void)
 {
     const void *image; int w, h;
-    image = nk_font_atlas_bake(&sdl.atlas, &w, &h, NK_FONT_ATLAS_RGBA32);
+    image = nk_font_atlas_bake(&sdl.atlas, &w, &h, NK_FONT_ATLAS_RGBA32, 1.0f);
     nk_sdl_device_upload_atlas(image, w, h);
     nk_font_atlas_end(&sdl.atlas, nk_handle_id((int)sdl.ogl.font_tex), &sdl.ogl.null);
     if (sdl.atlas.default_font)

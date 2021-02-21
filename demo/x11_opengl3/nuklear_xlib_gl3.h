@@ -590,7 +590,7 @@ NK_API void
 nk_x11_font_stash_end(void)
 {
     const void *image; int w, h;
-    image = nk_font_atlas_bake(&x11.atlas, &w, &h, NK_FONT_ATLAS_RGBA32);
+    image = nk_font_atlas_bake(&x11.atlas, &w, &h, NK_FONT_ATLAS_RGBA32, 1.0f);
     nk_x11_device_upload_atlas(image, w, h);
     nk_font_atlas_end(&x11.atlas, nk_handle_id((int)x11.ogl.font_tex), &x11.ogl.null);
     if (x11.atlas.default_font)

@@ -227,7 +227,7 @@ nk_d3d9_create_font_texture()
     HRESULT hr;
     D3DLOCKED_RECT locked;
 
-    image = nk_font_atlas_bake(&d3d9.atlas, &w, &h, NK_FONT_ATLAS_RGBA32);
+    image = nk_font_atlas_bake(&d3d9.atlas, &w, &h, NK_FONT_ATLAS_RGBA32, 1.0f);
 
     hr = IDirect3DDevice9_CreateTexture(d3d9.device, w, h, 1, D3DUSAGE_DYNAMIC, D3DFMT_A8R8G8B8, D3DPOOL_DEFAULT, &d3d9.texture, NULL);
     NK_ASSERT(SUCCEEDED(hr));

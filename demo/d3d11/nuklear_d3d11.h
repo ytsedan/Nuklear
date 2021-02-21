@@ -563,7 +563,7 @@ NK_API void
 nk_d3d11_font_stash_end(void)
 {
     const void *image; int w, h;
-    image = nk_font_atlas_bake(&d3d11.atlas, &w, &h, NK_FONT_ATLAS_RGBA32);
+    image = nk_font_atlas_bake(&d3d11.atlas, &w, &h, NK_FONT_ATLAS_RGBA32, 1.0f);
 
     /* upload font to texture and create texture view */
     {ID3D11Texture2D *font_texture;

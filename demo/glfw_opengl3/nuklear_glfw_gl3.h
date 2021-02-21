@@ -400,7 +400,7 @@ NK_API void
 nk_glfw3_font_stash_end(struct nk_glfw* glfw)
 {
     const void *image; int w, h;
-    image = nk_font_atlas_bake(&glfw->atlas, &w, &h, NK_FONT_ATLAS_RGBA32);
+    image = nk_font_atlas_bake(&glfw->atlas, &w, &h, NK_FONT_ATLAS_RGBA32, 1.0f);
     nk_glfw3_device_upload_atlas(glfw, image, w, h);
     nk_font_atlas_end(&glfw->atlas, nk_handle_id((int)glfw->ogl.font_tex), &glfw->ogl.null);
     if (glfw->atlas.default_font)

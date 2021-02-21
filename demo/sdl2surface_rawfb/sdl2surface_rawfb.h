@@ -825,7 +825,7 @@ nk_sdlsurface_init(SDL_Surface *fb, float fontSize)
     nk_font_atlas_init_default(&sdlsurface->atlas);
     nk_font_atlas_begin(&sdlsurface->atlas);
     sdlsurface->atlas.default_font = nk_font_atlas_add_default(&sdlsurface->atlas, fontSize, 0);
-    tex = nk_font_atlas_bake(&sdlsurface->atlas, &texw, &texh, NK_FONT_ATLAS_RGBA32);
+    tex = nk_font_atlas_bake(&sdlsurface->atlas, &texw, &texh, NK_FONT_ATLAS_RGBA32, 1.0f);
     if (!tex) {
     free(sdlsurface);
     return NULL;

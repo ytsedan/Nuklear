@@ -162,7 +162,7 @@ nk_font_baker(void *memory, int glyph_count, int count, struct nk_allocator *all
 NK_INTERN int
 nk_font_bake_pack(struct nk_font_baker *baker,
     nk_size *image_memory, int *width, int *height, struct nk_recti *custom,
-    const struct nk_font_config *config_list, int count,
+    const struct nk_font_config *config_list, int count, float render_scale,
     struct nk_allocator *alloc)
 {
     NK_STORAGE const nk_size max_height = 1024 * 32;
@@ -245,7 +245,7 @@ nk_font_bake_pack(struct nk_font_baker *baker,
                 range_n += range_count;
                 for (i = 0; i < range_count; ++i) {
                     in_range = &cfg->range[i * 2];
-                    tmp->ranges[i].font_size = cfg->size;
+                    tmp->ranges[i].font_size = cfg->size * render_scale;
                     tmp->ranges[i].first_unicode_codepoint_in_range = (int)in_range[0];
                     tmp->ranges[i].num_chars = (int)(in_range[1]- in_range[0]) + 1;
                     tmp->ranges[i].chardata_for_range = baker->packed_chars + char_n;
@@ -276,7 +276,7 @@ nk_font_bake_pack(struct nk_font_baker *baker,
     return nk_true;
 }
 NK_INTERN void
-nk_font_bake(struct nk_font_baker *baker, void *image_memory, int width, int height,
+nk_font_bake(struct nk_font_baker *baker, void *image_memory, int width, int height, float render_scale,
     struct nk_font_glyph *glyphs, int glyphs_count,
     const struct nk_font_config *config_list, int font_count)
 {
@@ -284,6 +284,7 @@ nk_font_bake(struct nk_font_baker *baker, void *image_memory, int width, int hei
     nk_rune glyph_n = 0;
     const struct nk_font_config *config_iter;
     const struct nk_font_config *it;
+    const float inv_render_scale = 1.0f / render_scale;
 
     NK_ASSERT(image_memory);
     NK_ASSERT(width);
@@ -360,8 +361,8 @@ nk_font_bake(struct nk_font_baker *baker, void *image_memory, int width, int hei
                     /* fill own glyph type with data */
                     glyph = &glyphs[dst_font->glyph_offset + dst_font->glyph_count + (unsigned int)glyph_count];
                     glyph->codepoint = codepoint;
-                    glyph->x0 = q.x0; glyph->y0 = q.y0;
-                    glyph->x1 = q.x1; glyph->y1 = q.y1;
+                    glyph->x0 = q.x0 * inv_render_scale; glyph->y0 = q.y0 * inv_render_scale;
+                    glyph->x1 = q.x1 * inv_render_scale; glyph->y1 = q.y1 * inv_render_scale;
                     glyph->y0 += (dst_font->ascent + 0.5f);
                     glyph->y1 += (dst_font->ascent + 0.5f);
                     glyph->w = glyph->x1 - glyph->x0 + 0.5f;
@@ -378,7 +379,7 @@ nk_font_bake(struct nk_font_baker *baker, void *image_memory, int width, int hei
                         glyph->u1 = q.s1;
                         glyph->v1 = q.t1;
                     }
-                    glyph->xadvance = (pc->xadvance + cfg->spacing.x);
+                    glyph->xadvance = (pc->xadvance + cfg->spacing.x) * inv_render_scale;
                     if (cfg->pixel_snap)
                         glyph->xadvance = (float)(int)(glyph->xadvance + 0.5f);
                     glyph_count++;
@@ -1149,7 +1150,7 @@ nk_font_atlas_add_default(struct nk_font_atlas *atlas,
 #endif
 NK_API const void*
 nk_font_atlas_bake(struct nk_font_atlas *atlas, int *width, int *height,
-    enum nk_font_atlas_format fmt)
+    enum nk_font_atlas_format fmt, float render_scale)
 {
     int i = 0;
     void *tmp = 0;
@@ -1197,7 +1198,7 @@ nk_font_atlas_bake(struct nk_font_atlas *atlas, int *width, int *height,
     atlas->custom.w = (NK_CURSOR_DATA_W*2)+1;
     atlas->custom.h = NK_CURSOR_DATA_H + 1;
     if (!nk_font_bake_pack(baker, &img_size, width, height, &atlas->custom,
-        atlas->config, atlas->font_num, &atlas->temporary))
+        atlas->config, atlas->font_num, render_scale, &atlas->temporary))
         goto failed;
 
     /* allocate memory for the baked image font atlas */
@@ -1207,7 +1208,7 @@ nk_font_atlas_bake(struct nk_font_atlas *atlas, int *width, int *height,
         goto failed;
 
     /* bake glyphs and custom white pixel into image */
-    nk_font_bake(baker, atlas->pixel, *width, *height,
+    nk_font_bake(baker, atlas->pixel, *width, *height, render_scale,
         atlas->glyphs, atlas->glyph_count, atlas->config, atlas->font_num);
     nk_font_bake_custom_data(atlas->pixel, *width, *height, atlas->custom,
             nk_custom_cursor_data, NK_CURSOR_DATA_W, NK_CURSOR_DATA_H, '.', 'X');

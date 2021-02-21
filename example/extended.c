@@ -692,6 +692,7 @@ device_draw(struct device *dev, struct nk_context *ctx, int width, int height,
             config.global_alpha = 1.0f;
             config.shape_AA = AA;
             config.line_AA = AA;
+            config.scale_AA = scale.y;
 
             /* setup buffers to load vertices and elements */
             {struct nk_buffer vbuf, ebuf;
@@ -790,7 +791,7 @@ int main(int argc, char *argv[])
     media.font_18 = nk_font_atlas_add_from_file(&atlas, "../../extra_font/Roboto-Regular.ttf", 18.0f, &cfg);
     media.font_20 = nk_font_atlas_add_from_file(&atlas, "../../extra_font/Roboto-Regular.ttf", 20.0f, &cfg);
     media.font_22 = nk_font_atlas_add_from_file(&atlas, "../../extra_font/Roboto-Regular.ttf", 22.0f, &cfg);
-    image = nk_font_atlas_bake(&atlas, &w, &h, NK_FONT_ATLAS_RGBA32);
+    image = nk_font_atlas_bake(&atlas, &w, &h, NK_FONT_ATLAS_RGBA32, (float)display_height/(float)height);
     device_upload_atlas(&device, image, w, h);
     nk_font_atlas_end(&atlas, nk_handle_id((int)device.font_tex), &device.null);}
     nk_init_default(&ctx, &media.font_14->handle);}

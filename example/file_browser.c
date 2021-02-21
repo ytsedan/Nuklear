@@ -724,6 +724,7 @@ device_draw(struct device *dev, struct nk_context *ctx, int width, int height,
             config.global_alpha = 1.0f;
             config.shape_AA = AA;
             config.line_AA = AA;
+            config.scale_AA = scale.y;
 
             /* setup buffers to load vertices and elements */
             {struct nk_buffer vbuf, ebuf;
@@ -799,6 +800,8 @@ int main(int argc, char *argv[])
     glfwSetWindowUserPointer(win, &ctx);
     glfwSetCharCallback(win, text_input);
     glfwSetScrollCallback(win, scroll_input);
+    glfwGetWindowSize(win, &width, &height);
+    glfwGetFramebufferSize(win, &display_width, &display_height);
 
     /* OpenGL */
     glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -816,7 +819,7 @@ int main(int argc, char *argv[])
     nk_font_atlas_begin(&atlas);
     if (font_path) font = nk_font_atlas_add_from_file(&atlas, font_path, 13.0f, NULL);
     else font = nk_font_atlas_add_default(&atlas, 13.0f, NULL);
-    image = nk_font_atlas_bake(&atlas, &w, &h, NK_FONT_ATLAS_RGBA32);
+    image = nk_font_atlas_bake(&atlas, &w, &h, NK_FONT_ATLAS_RGBA32, (float)display_height/(float)height);
     device_upload_atlas(&device, image, w, h);
     nk_font_atlas_end(&atlas, nk_handle_id((int)device.font_tex), &device.null);}
     nk_init_default(&ctx, &font->handle);}

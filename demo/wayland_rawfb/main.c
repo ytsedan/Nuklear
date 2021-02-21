@@ -246,7 +246,7 @@ static void nk_wayland_init(struct nk_wayland* win)
 
     nk_font_atlas_init_default(&(win->atlas));
     nk_font_atlas_begin(&(win->atlas));
-    tex = nk_font_atlas_bake(&(win->atlas), &(win->font_tex.w), &(win->font_tex.h), win->font_tex.format);
+    tex = nk_font_atlas_bake(&(win->atlas), &(win->font_tex.w), &(win->font_tex.h), win->font_tex.format, 1.0f);
     if (!tex) {
         return;
     }

@@ -236,7 +236,7 @@ nk_sfml_font_stash_end()
 {
     int w, h;
     const void* img;
-    img = nk_font_atlas_bake(&sfml.atlas, &w, &h, NK_FONT_ATLAS_RGBA32);
+    img = nk_font_atlas_bake(&sfml.atlas, &w, &h, NK_FONT_ATLAS_RGBA32, 1.0f);
     nk_sfml_device_upload_atlas(img, w, h);
     nk_font_atlas_end(&sfml.atlas, nk_handle_id((int)sfml.ogl.font_tex), &sfml.ogl.null);
     if(sfml.atlas.default_font)

@@ -848,7 +848,7 @@ nk_rawfb_init(void *fb, void *tex_mem, const unsigned int w, const unsigned int 
 
     nk_font_atlas_init_default(&rawfb->atlas);
     nk_font_atlas_begin(&rawfb->atlas);
-    tex = nk_font_atlas_bake(&rawfb->atlas, &rawfb->font_tex.w, &rawfb->font_tex.h, rawfb->font_tex.format);
+    tex = nk_font_atlas_bake(&rawfb->atlas, &rawfb->font_tex.w, &rawfb->font_tex.h, rawfb->font_tex.format, 1.0f);
     if (!tex) {
 	free(rawfb);
 	return NULL;
